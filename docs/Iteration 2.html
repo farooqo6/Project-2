@@ -1,0 +1,42 @@
+<html>
+    <head>
+      <style> 
+          .output {color: chartreuse:}
+      </style>
+      <script src ="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+      <script>
+          var url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?begin_date=19950101&q=Raptors&api-key=0orC1MQy6ng9MIyOgQsXGR86gK8dVahh'
+          var articleCount = 0
+          function setup() {
+              noCanvas();
+              loadJSON(url, gotData);
+            }
+          
+          function gotData(data) {
+              appendToPage(data)
+              var hits = data.response.meta.hits
+              for (var i = 1; i < 3; i++) {
+              loadJSON(url + '&page=' + 1, appendToPage)
+             }
+          }
+          
+          function appendToPage(data) {
+              var articles = data.response.docs;
+              for (var i = 0; i < articles.length; i++) {
+                  articleCount++
+                  h = document.createElement('h3')
+                  h.innerHTML = '(' + articleCount + ')' + articles[i].headline.main
+                  document.body.appendChild(h);
+                  p = document.createElement('p')
+                  p.innerHTML = articles[i].snippet
+                  document.body.appendChild(p);
+              }
+          }
+       </script>  
+    </head>
+    <body>
+        <h1>New York Times API: Articles from 1995 about Raptors</h1>
+        <p id="test_output" class="output"></p> 
+    </body>
+</html>
+
